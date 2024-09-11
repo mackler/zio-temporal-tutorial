@@ -13,15 +13,14 @@ object ClientMain extends ZIOAppDefault:
         workflowOptions = ZWorkflowOptions
           .withWorkflowId(workflowID)
           .withTaskQueue("my-task-queue")
-//         .withWorkflowRunTimeout(1.hour)
         helloWorld <- client.newWorkflowStub[HelloWorld](workflowOptions)
         result     <- ZWorkflowStub.execute(helloWorld(name))
       yield result
 
   val program = for
-    name           <- getArgs.map(_(0))
+    name   <- getArgs.map(_(0))
     result <- invokeWorkflow(name)
-    _              <- Console.printLine(result)
+    _      <- Console.printLine(result)
   yield ()
 
   override def run = program.provideSome[ZIOAppArgs & Scope](
