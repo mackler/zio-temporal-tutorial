@@ -1,4 +1,4 @@
-ThisBuild / scalaVersion := "3.4.3"
+ThisBuild / scalaVersion := "3.5.1"
 
 libraryDependencies ++= Seq(
   "dev.vhonta" %% "zio-temporal-core" % "0.6.1",

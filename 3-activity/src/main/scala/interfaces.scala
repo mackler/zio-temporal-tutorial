@@ -10,18 +10,18 @@ import scala.io.Source
 
 class AnswerQuestionImpl extends AnswerQuestion:
 
-  val activity = ZWorkflow.newActivityStub[QuestionActivity]:
+  val activities = ZWorkflow.newActivityStub[QuestionActivity]:
       ZActivityOptions.withStartToCloseTimeout(60.seconds)
 
   override def apply(question: Question) =
-    val answer = ZActivityStub.execute(activity.getAnswer())
+    val answer = ZActivityStub.execute(activities.getAnswer())
     s"Hello ${question.name}. You asked, “${question.text}” The answer is $answer."
 
 @activityInterface trait QuestionActivity:
   def getAnswer(): String
 
 class QuestionActivityImpl extends QuestionActivity:
-  override def getAnswer(): String =
+  override def getAnswer() =
     Source.fromURL("https://yesno.wtf/api").mkString.fromJson[YesOrNo] match
-      case Right(YesOrNo(answer, _, _)) => answer
       case Left(_)                      => "unavailable"
+      case Right(YesOrNo(answer, _, _)) => answer
